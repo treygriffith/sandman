@@ -37,28 +37,35 @@ The other limitation is one of speed and memory. Each Sandman instance creates a
 Usage
 -----
 
-Sandman runner
+For Sandman to work properly, you need to have an entrypoint file that knows its a Sandman client.
+This entry point file is used to get data from the parent process into your untrusted modules, get data back out,
+and to notify the parent when it's finished executing.
+
+Fortunately, it's easy. The entrypoint file needs to interact through two global variables:
+
+- `args` contains any data passed through Sandman.run (which goes through JSON sanitization), and should be used to pass data to the untrusted code.
+- `callback` is a function to be executed with the familiar `(err, result)` pattern at the conclusion of the program. The result should contain any primitive data to be returned to the Sandman.run callback. Note that the process will exit after this function is called.
+
+Here's an example entry point file, called entrypoint.js:
 
 ```javascript
-var Sandman = require('sandman');
+var untrustedModule = require('untrusted');
 
-Sandman.run('/my/safe/root/with/untrusted/file.js', '/my/safe/root', { arg1: "some_argument", arg2: 42 }, function (err, finishedExports) {
-  if(err) {
-    throw err;
-  }
+var myValue = untrusted.beBad(args.someValue, args.someOtherValue);
 
-  console.log(finishedExports.someValue);
+// call callback in order to properly end the process
+callback(null, myValue);
+
+```
+
+From there you just need to call your entrypoint file using Sandman with a restricted root, like so:
+
+```javascript
+
+Sandman.run('./entrypoint.js', '/path/to/restricted/root', { arg1: "some_argument", arg2: 42 }, function (err, myValue) {
+  
+  console.log(myValue); // outputs the reuslt of untrusted.beBad
 });
 ```
 
-Untrusted file runner
 
-```javascript
-var untrusted = require('untrusted');
-
-var myValue = untrusted.fn(args.arg1, args.arg2);
-
-// you have to call args.callback in order to properly end the process
-args.callback(null, myValue);
-
-```
