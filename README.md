@@ -68,7 +68,7 @@ From there you just need to call your entrypoint file using Sandman with a restr
 
 ```javascript
 
-Sandman.run('./entrypoint.js', '/path/to/restricted/root', { arg1: "some_argument", arg2: 42 }, function (err, myValue) {
+Sandman.run('./entrypoint.js', '/path/to/restricted/root', { someValue: "some_argument", someOtherValue: 42 }, function (err, myValue) {
   
   console.log(myValue); // outputs the reuslt of untrusted.beBad
 });
