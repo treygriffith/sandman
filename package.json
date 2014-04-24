@@ -1,6 +1,6 @@
 {
   "name": "sandman",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Sandbox for executing (somewhat) untrusted code",
   "main": "lib/index.js",
   "scripts": {

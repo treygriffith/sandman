@@ -99,4 +99,5 @@ Within the entrypoint file, you can access the Sandman client by calling `requir
 - `filename` the entrypoint file. (this is also available on the global scope in `__filename`)
 - `interface` An alias for `process`, this is used to communicate with the Sandman constructor via `Client#interface.send`
 
+Plus lots of other goodies that you can check out in the source. But be **warned** - do not pass the client to any untrusted code - it has everything you need to break out of the jailed environment in a hot second.
 
