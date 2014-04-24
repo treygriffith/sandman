@@ -12,21 +12,22 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
 
 ### Features
 
-Sandman operates in a separate process from the parent process, and every module is executed in a virtual machine that is locked down.
+- Operates in a new process, and every module in its own virtual machine and context
+- No `fs` access outside the defined `root`
+- Cannot change the current working directory
+- Cannot change uid or gid
+- No access to dangerous core modules:
+  - child_process
+  - cluster
+  - http
+  - https
+  - net
+  - tls
+  - dgram
+  - vm
+  - repl
 
-Specifically, the modules can't access files (through `fs`) outside of the defined `root`. The modules are also unable to change the current working directory, and can't `require` dangerous node modules. The list of blacklisted modules is below:
-
-- child_process
-- cluster
-- http
-- https
-- net
-- tls
-- dgram
-- vm
-- repl
-
-The key difference between Sandman and most other sandboxing libraries is that the entire dependency chain is similarly contained. So requiring `fs-extra`, which in turn requires `fs` will not get you outside the sandbox.
+The key difference between Sandman and most other sandboxing libraries is that the entire dependency chain is contained. So requiring `fs-extra`, which in turn requires `fs` will not get you outside the sandbox.
 
 ### Limitations
 
