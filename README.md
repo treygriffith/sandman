@@ -97,5 +97,6 @@ Within the entrypoint file, you can access the Sandman client by calling `requir
 - `callback` see above
 - `root` the secure root that Sandman was called in
 - `filename` the entrypoint file. (this is also available on the global scope in `__filename`)
-- `interface` a limited version of the 
+- `interface` An alias for `process`, this is used to communicate with the Sandman constructor via `Client#interface.send`
+
 
