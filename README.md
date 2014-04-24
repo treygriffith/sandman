@@ -16,6 +16,7 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
 - No `fs` access outside the defined `root`
 - Cannot change the current working directory
 - Cannot change uid or gid
+- Timeout to kill runaway processes
 - No access to dangerous core modules:
   - child_process
   - cluster
