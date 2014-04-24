@@ -56,6 +56,9 @@ Untrusted file runner
 ```javascript
 var untrusted = require('untrusted');
 
-exports.someValue = untrusted.fn(args.arg1, args.arg2);
+var myValue = untrusted.fn(args.arg1, args.arg2);
+
+// you have to call args.callback in order to properly end the process
+args.callback(null, myValue);
 
 ```
