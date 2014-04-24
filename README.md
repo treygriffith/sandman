@@ -8,7 +8,7 @@ About
 
 ### Security
 
-This isn't truly secure, and there likely isn't a way to make Node.js secure at the application level. Instead, this module provides a way to execute Node.js code that should prevent against most kinds of unintentional bad stuff.
+This isn't truly secure, and there likely isn't a way to make Node.js secure at the application level (See [this discussion](https://groups.google.com/forum/#!topic/nodejs-dev/9vApf6IvRxk)). Instead, this module provides a way to execute Node.js code that should prevent against most kinds of unintentional bad stuff.
 
 ### Features
 
