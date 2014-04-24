@@ -20,6 +20,10 @@
     "name": "Trey Griffith",
     "email": "trey@tgriff3.com",
     "website": "http://tgriff3.com"
-    },
-  "license": "MIT"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "resolve": "^0.6.3",
+    "debug": "^0.8.0"
+  }
 }
