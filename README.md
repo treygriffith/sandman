@@ -86,7 +86,7 @@ var sandman = new Sandman("./entrypoint.js", "/some/safe/root");
 
 The sandman object exposes an `interface` which can be used to send messages (and sendHandles) to your entrypoint file. The interface is just a [ChildProcess](http://nodejs.org/api/child_process.html#child_process_class_childprocess).
 
-Sandman also has three `interface` event handlers, `_onMessage`, `_onError`, and `_onExit`, which correspond to the [`message`]((http://nodejs.org/api/child_process.html#child_process_event_message), [`error`](http://nodejs.org/api/child_process.html#child_process_event_error), and [`exit`](http://nodejs.org/api/child_process.html#child_process_event_exit) events. You can override those handlers to define new behaviors.
+Sandman also has three `interface` event handlers, `_onMessage`, `_onError`, and `_onExit`, which correspond to the [`message`](http://nodejs.org/api/child_process.html#child_process_event_message), [`error`](http://nodejs.org/api/child_process.html#child_process_event_error), and [`exit`](http://nodejs.org/api/child_process.html#child_process_event_exit) events. You can override those handlers to define new behaviors.
 
 To start the entrypoint file, just use the `run` method:
 
