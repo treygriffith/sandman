@@ -1,0 +1,23 @@
+{
+  "name": "sandman",
+  "version": "0.0.1",
+  "description": "Sandbox for executing (somewhat) untrusted code",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sandbox",
+    "secure",
+    "untrusted",
+    "container",
+    "virtual",
+    "machine"
+  ],
+  "author": {
+    "name": "Trey Griffith",
+    "email": "trey@tgriff3.com",
+    "website": "http://tgriff3.com"
+    },
+  "license": "MIT"
+}
