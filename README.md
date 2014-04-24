@@ -88,7 +88,14 @@ The sandman object exposes an `interface` which can be used to send messages (an
 
 Sandman also has three `interface` event handlers, `_onMessage`, `_onError`, and `_onExit`, which correspond to the [`message`]((http://nodejs.org/api/child_process.html#child_process_event_message), [`error`](http://nodejs.org/api/child_process.html#child_process_event_error), and [`exit`](http://nodejs.org/api/child_process.html#child_process_event_exit) events. You can override those handlers to define new behaviors.
 
-To start the entrypoint file, just use the `run` method, which accepts an arguments object and a callback as its paramters.
+To start the entrypoint file, just use the `run` method:
+
+```javascript
+sandman.run({ someValue: "an argument", anotherValue: "some other argument" });
+```
+
+You can also pass messages and handles (like sockets) to the entry point using the [`Sandman#interface.send` method](http://nodejs.org/api/child_process.html#child_process_child_send_message_sendhandle).
+
 
 #### Client
 
