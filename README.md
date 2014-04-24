@@ -12,7 +12,7 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
 
 ### Features
 
-- Operates in a new process, and every module in its own virtual machine and context
+- Operates in a new process, and every module in its own [context](http://nodejs.org/api/vm.html)
 - No `fs` access outside the defined `root`
 - Cannot change the current working directory to be outside of `root`
 - Cannot change uid or gid
@@ -36,7 +36,7 @@ The most obvious limitation is the attack surface area - there are almost certai
 
 Most specifically, because `require` calls are not contained to the `root` directory the way that `fs` calls are, it is possible to `require` a file that is outside of your `root`, giving a potential attacker access to potentially sensitive data. This is mitigated by only allowing `require`s on files outside of the `root` if they are contained in a `node_modules` directory, but that's hardly bulletproof.
 
-The other limitation is one of speed and memory. Each Sandman instance creates a new process, and each dependency is put in its own virtual machine. So obviously you can't have tons of these on a single machine.
+The other limitation is one of speed and memory. Each Sandman instance creates a new process, and each dependency is put in a [new context](http://nodejs.org/api/vm.html). So obviously you can't have tons of these on a single machine.
 
 Usage
 -----
