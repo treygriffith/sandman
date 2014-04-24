@@ -12,7 +12,9 @@
     "untrusted",
     "container",
     "virtual",
-    "machine"
+    "machine",
+    "chroot",
+    "jail"
   ],
   "author": {
     "name": "Trey Griffith",
