@@ -49,33 +49,32 @@ You can have more control over the Sandman instance by using the constructor:
 var sandman = new Sandman("./entrypoint.js", "/some/safe/root");
 ```
 
-The sandman object exposes an `interface` which can be used to send messages (and sendHandles) to your entrypoint file. The interface is just a [ChildProcess](http://nodejs.org/api/child_process.html#child_process_class_childprocess).
+The Sandman instance exposes the following properties and methods:
 
-Sandman also has three `interface` event handlers, `_onMessage`, `_onError`, and `_onExit`, which correspond to the [`message`](http://nodejs.org/api/child_process.html#child_process_event_message), [`error`](http://nodejs.org/api/child_process.html#child_process_event_error), and [`exit`](http://nodejs.org/api/child_process.html#child_process_event_exit) events. You can override those handlers to define new behaviors.
-
-To start the entrypoint file, just use the `run` method:
-
-```javascript
-sandman.run({ someValue: "an argument", anotherValue: "some other argument" });
-```
-
-You can also pass messages and handles (like sockets) to the entry point using the [`Sandman#interface.send` method](http://nodejs.org/api/child_process.html#child_process_child_send_message_sendhandle).
-
+- `interface` a [ChildProcess](http://nodejs.org/api/child_process.html#child_process_class_childprocess) connected to the Sandman client. This can be used to [send messages and sockets](http://nodejs.org/api/child_process.html#child_process_child_send_message_sendhandle) to your entrypoint file.
+- `run` - Start the entrypoint file. Called with an array of arguments and a callback.
+- `_onMessage` - Listens for [`message`](http://nodejs.org/api/child_process.html#child_process_event_message) from the client. Change it before calling `run`.
+- `_onError` - Listens for [`error`](http://nodejs.org/api/child_process.html#child_process_event_error) from the client. Change it before calling `run`.
+- `_onExit` - Listens for [`exit`](http://nodejs.org/api/child_process.html#child_process_event_exit) from the client. Change it before calling `run`.
 
 #### Client
 
-Within the entrypoint file, the Sandman client is the last argument on `module.exports` in your entrypoint file. You can also access the client by doing `require('sandman')`.
+Within the entrypoint file, you can access the client by doing:
 
-The client exposes the following methods and properties:
+```javascript
+var sandmanClient = require('sandman')
+```
 
-- `arguments` array of arguments called on `Sandman#run`.
-- `callback` Callback to be called when the entrypoint file is done.
+The Sandman Client exposes the following methods and properties:
+
+- `arguments` array of arguments called on `Sandman#run`. (these are applied to the entrypoint file's `module.exports` function)
+- `callback` Callback to be called when the entrypoint file is done. (this is the last argument supplied to the entrypoint file's `module.exports` function)
 - `root` the secure root that Sandman was called in
 - `filename` the entrypoint file name. (this is also available on the global scope in `__filename`)
 - `interface` An alias for `process`, this is used to communicate with the Sandman constructor via `Client#interface.send`
 - `sendError` A sugary method for sending errors to the Sandman constructor (used internally when `callback`'s first parameter is an error)
 
-Be **warned** - do not pass the client to any untrusted code - it probably has everything you need to break out of the jailed environment in a hot second.
+Be **warned** - do not pass the client to any untrusted code - it *probably* has everything you need to break out of the jailed environment in a hot second.
 
 
 About
@@ -83,7 +82,7 @@ About
 
 ### Security
 
-This isn't truly secure, and there likely isn't a way to make Node.js secure at the application level (See [this discussion](https://groups.google.com/forum/#!topic/nodejs-dev/9vApf6IvRxk)). Instead, this module provides a way to execute Node.js code that should prevent against most kinds of unintentional bad stuff.
+This isn't truly secure, and there likely isn't a way to make Node.js secure at the application level (See [this discussion](https://groups.google.com/forum/#!topic/nodejs-dev/9vApf6IvRxk)). Instead, this module provides a way to execute Node.js code that should prevent against most kinds of bad stuff, intentional or unintentional.
 
 ### Features
 
@@ -92,6 +91,7 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
 - Cannot change the current working directory to be outside of `root`
 - Cannot change uid or gid
 - Timeout to kill runaway processes
+- Cannot `require` files outside of `root` that are not inside `node_modules`
 - No access to dangerous core modules:
   - child_process
   - cluster
@@ -103,7 +103,7 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
   - vm
   - repl
 
-The key difference between Sandman and most other sandboxing libraries is that the entire dependency chain is contained. So requiring `fs-extra`, which in turn requires `fs` will not get you outside the sandbox.
+The key difference between Sandman and most other sandboxing libraries is that the entire dependency chain is contained. So, for example, requiring `fs-extra`, which in turn requires `fs` will not get you outside the sandbox.
 
 ### Limitations
 
@@ -111,4 +111,4 @@ The most obvious limitation is the attack surface area - there are almost certai
 
 Most specifically, because `require` calls are not contained to the `root` directory the way that `fs` calls are, it is possible to `require` a file that is outside of your `root`, giving a potential attacker access to potentially sensitive data. This is mitigated by only allowing `require`s on files outside of the `root` if they are contained in a `node_modules` directory, but that's hardly bulletproof.
 
-The other limitation is one of speed and memory. Each Sandman instance creates a new process, and each dependency is put in a [new context](http://nodejs.org/api/vm.html). So obviously you can't have tons of these on a single machine.
+The other limitation is one of speed and memory. Each Sandman instance creates a new process, and each dependency is put in a [new context](http://nodejs.org/api/vm.html). This is much lower overhead than OS level sandboxing, but you obviously can't have tons of these (i.e. thousands) on a single machine.
