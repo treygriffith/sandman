@@ -1,7 +1,8 @@
 {
   "name": "sandman",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Sandbox for executing (somewhat) untrusted code",
+  "homepage": "https://github.com/treygriffith/sandman",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,6 +21,10 @@
     "name": "Trey Griffith",
     "email": "trey@tgriff3.com",
     "website": "http://tgriff3.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treygriffith/sandman"
   },
   "license": "MIT",
   "dependencies": {
