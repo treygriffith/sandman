@@ -100,7 +100,6 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
   - net
   - tls
   - dgram
-  - vm
   - repl
 
 The key difference between Sandman and most other sandboxing libraries is that the entire dependency chain is contained. So, for example, requiring `fs-extra`, which in turn requires `fs` will not get you outside the sandbox.
