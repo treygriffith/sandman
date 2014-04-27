@@ -87,11 +87,11 @@ This isn't truly secure, and there likely isn't a way to make Node.js secure at 
 ### Features
 
 - Operates in a new process, and every module in its own [context](http://nodejs.org/api/vm.html)
-- No `fs` access outside the defined `root`
+- No `fs` access outside the defined `root`, except files within a `node_modules` directory
 - Cannot change the current working directory to be outside of `root`
 - Cannot change uid or gid
 - Timeout to kill runaway processes
-- Cannot `require` files outside of `root` that are not inside `node_modules`
+- Cannot `require` files outside of `root`, except fiels within a `node_modules` directory
 - No access to dangerous core modules:
   - child_process
   - cluster
@@ -108,6 +108,6 @@ The key difference between Sandman and most other sandboxing libraries is that t
 
 The most obvious limitation is the attack surface area - there are almost certainly ways to exploit this kind of sandboxing, so don't rely on it for anything super important.
 
-Most specifically, because `require` calls are not contained to the `root` directory the way that `fs` calls are, it is possible to `require` a file that is outside of your `root`, giving a potential attacker access to potentially sensitive data. This is mitigated by only allowing `require`s on files outside of the `root` if they are contained in a `node_modules` directory, but that's hardly bulletproof.
+Most specifically, for reasons of practicality and interop with npm, `require` and `fs` calls are not limited to `root` when the requested file is inside of a `node_modules` directory. This should be fine in most cases, as published modules shouldn't contain anything sensitive, but it certainly opens up a potential attack vector.
 
 The other limitation is one of speed and memory. Each Sandman instance creates a new process, and each dependency is put in a [new context](http://nodejs.org/api/vm.html). This is much lower overhead than OS level sandboxing, but you obviously can't have tons of these (i.e. thousands) on a single machine.
